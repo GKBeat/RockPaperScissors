@@ -50,10 +50,10 @@ $(".button").on("click", function(event) {
 
             $(".playerPoints").text(`Player:${playerPoints}`)
             $(".pcPoints").text(`PC:${pcPoints}`)
+            currentlyFighting = false;
+        }, 1500);
 
-        }, 1000);
 
-        currentlyFighting = false;
     }
 });
 
