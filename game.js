@@ -102,8 +102,10 @@ function pcNormalHardAI(difficulty) {
 
     console.log(lastChoices);
 
-    if(lastChoices[3] === undefined){
-        pcChoice = pcEasyAI();
+    if(lastChoices.length > 3){
+        if(lastChoices[3] === undefined){
+            pcChoice = pcEasyAI();
+        }
 
     }else if (rock >= paper && rock >= scissors) {
         pcChoice = "paper";
