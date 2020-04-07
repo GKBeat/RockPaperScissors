@@ -20,7 +20,7 @@ $(".button").on("click", function(event) {
         $(`#${playerChoice}`).addClass("pressed");
         setTimeout(function() {
             $(`#${playerChoice}`).removeClass("pressed");
-        }, 1000);
+        }, 1500);
 
         player.removeClass("fa-question");
         player.addClass(`fa-hand-${playerChoice}`);
