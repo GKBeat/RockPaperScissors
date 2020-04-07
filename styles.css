@@ -5,9 +5,16 @@ body{
     color: #c24d2c;
 }
 
+select{
+    background-color: #3e4a61;
+    font-family: 'Audiowide', cursive;
+    color: #c24d2c;
+    font-size: 1.5rem;
+}
+
 .title{
     font-size: 6rem;
-    height: 11rem; 
+    height: 11rem;
 }
 
 .fas{
@@ -44,4 +51,8 @@ body{
     font-size: 2rem;
     display: block;
 
+}
+
+.difficulty{
+    font-size: 2rem;
 }
