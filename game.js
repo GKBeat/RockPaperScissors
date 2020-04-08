@@ -1,15 +1,21 @@
 const pcAnswer = ["rock", "paper", "scissors"];
-const player = $(".player");
 const pc = $(".pc");
-
-var currentlyFighting = false;
-var playerPoints = 0;
-var pcPoints = 0;
+const player = $(".player");
 
 // es startet immer mit der leichtesten stufe
-var difficulty = "easy";
+var strategy = "random";
 
+// die Player variablen
+var currentlyFighting = false;
+var playerPoints = 0;
 var playerPattern= [];
+
+// die Bot variablen
+var pcPoints = 0;
+var pcLostLastRound = false;
+var pcLostAgainst = "";
+var pcChoice = "";
+var lastChoices = "";
 
 $(".button").on("click", function(event) {
     if (!currentlyFighting) {
@@ -19,30 +25,27 @@ $(".button").on("click", function(event) {
         // wenn man auf den knopf drückt wird der button orange
         $(`#${playerChoice}`).addClass("pressed");
 
+        playerPattern.push(playerChoice);
+
         // das Player fragezeichen wird zu dem ausgewählten
         player.removeClass("fa-question");
         player.addClass(`fa-hand-${playerChoice}`);
 
-        let pcChoice = "";
-
         // je eingestellter schwierigkeit macht der computer eine Aktion
-        if (difficulty === "easy") {
+        if (strategy === "random") {
             pcChoice = pcEasyAI();
 
-        } else if (difficulty === "normal" || difficulty === "hard") {
-            pcChoice = pcNormalHardAI(difficulty);
+        } else if (strategy === "short" || strategy === "wide") {
+            pcChoice = pcNormalHardAI(strategy);
 
-        } else if (difficulty === "unbeatable") {
-            pcChoice = pcUnbeatableAI(playerChoice);
+
+        } else if (strategy === "denizStrat") {
+            pcChoice = pcDenizStratAI();
         }
 
 
         // wer hat gewonnen?
         gameLogic(playerChoice, pcChoice);
-
-        // damit der bot in den schwierigkeitsstufen analysieren kann was der Player bisher gewählt hat
-        playerPattern.push(playerChoice);
-
 
         // alles wird aufgeräumt und für die nächste Runde vorbereitet
         setTimeout(function() {
@@ -57,23 +60,24 @@ $(".button").on("click", function(event) {
 
             $(".playerPoints").text(`Player:${playerPoints}`)
             $(".pcPoints").text(`PC:${pcPoints}`)
+
             currentlyFighting = false;
+
         }, 1500);
     }
 });
 
 
 // ändert die schwierigkeit
-$(".selectDifficulty").on("change", function(event) {
-    let selectedDifficulty = event.target.value;
-    difficulty = selectedDifficulty;
+$(".selectStrategy").on("change", function(event) {
+    strategy = event.target.value;
 });
 
 
 // der Bot sucht sich random was aus und wählt es
 function pcEasyAI() {
     let randomSign = Math.floor(Math.random() * 3);
-    let pcChoice = pcAnswer[randomSign];
+    pcChoice = pcAnswer[randomSign];
 
     changePcIcon(pcChoice);
 
@@ -82,19 +86,16 @@ function pcEasyAI() {
 
 
 // der Bot  analysiert je nach schwierigkeit
-function pcNormalHardAI(difficulty) {
-
+function pcNormalHardAI(strategy) {
     let rock = 0;
     let paper = 0;
     let scissors = 0;
 
-    let pcChoice = "";
-    let lastChoices = "";
 
-    if(difficulty === "normal"){
+    if(strategy === "short"){
         lastChoices = lastMultiple(3);
 
-    }else if(difficulty === "hard"){
+    }else if(strategy === "wide"){
         lastChoices = lastMultiple(8);
     }
 
@@ -111,21 +112,24 @@ function pcNormalHardAI(difficulty) {
         }
     }
 
-    console.log(lastChoices);
 
-    if(lastChoices.length > 3 && lastChoices[3] === undefined){
+    if((lastChoices.length === 8 && lastChoices[3] === undefined) || (lastChoices.length === 3 && lastChoices[0] === undefined)){
         pcChoice = pcEasyAI();
-
-    }else if (rock >= paper && rock >= scissors) {
-        pcChoice = "paper";
-
-    } else if (paper >= rock && paper >= scissors) {
-        pcChoice = "scissors";
-
-    } else if (scissors >= rock && scissors >= scissors) {
-        pcChoice = "rock";
-
     }
+
+    if (rock >= paper && rock >= scissors) {
+        pcChoice = "paper";
+    }
+
+    if (paper >= rock && paper >= scissors) {
+        pcChoice = "scissors";
+    }
+
+    if (scissors >= rock && scissors >= scissors) {
+        pcChoice = "rock";
+    }
+
+    console.log(lastChoices);
 
     changePcIcon(pcChoice);
 
@@ -134,17 +138,10 @@ function pcNormalHardAI(difficulty) {
 
 
 // der Bot weiß immer was der Player pickt und macht
-function pcUnbeatableAI(playerChoice) {
-    let pcChoice = ""
-    if (playerChoice === "rock") {
-        pcChoice = "paper";
-
-    } else if (playerChoice === "paper") {
-        pcChoice = "scissors";
-
-    } else if (playerChoice === "scissors") {
-        pcChoice = "rock";
-
+function pcDenizStratAI() {
+    let pcChoice = "rock";
+    if (pcLostLastRound){
+        pcChoice = pcLostAgainst;
     }
 
     changePcIcon(pcChoice);
@@ -183,11 +180,14 @@ function gameLogic(playerChoice, pcChoice) {
         if (pcChoice === "paper") {
             $(".title").text("PC WINS!");
             pcPoints += 1;
+            pcLostLastRound = false;
 
         }
         if (pcChoice === "scissors") {
             $(".title").text("Player WINS!");
             playerPoints += 1;
+            pcLostLastRound = true;
+            pcLostAgainst = "rock"
         }
     }
 
@@ -195,10 +195,13 @@ function gameLogic(playerChoice, pcChoice) {
         if (pcChoice === "scissors") {
             $(".title").text("PC WINS!");
             pcPoints += 1;
+            pcLostLastRound = false;
         }
         if (pcChoice === "rock") {
             $(".title").text("Player WINS!");
             playerPoints += 1;
+            pcLostLastRound = true;
+            pcLostAgainst = "paper"
         }
     }
 
@@ -206,10 +209,13 @@ function gameLogic(playerChoice, pcChoice) {
         if (pcChoice === "rock") {
             $(".title").text("PC WINS!");
             pcPoints += 1;
+            pcLostLastRound = false;
         }
         if (pcChoice === "paper") {
             $(".title").text("Player WINS!");
             playerPoints += 1;
+            pcLostLastRound = true;
+            pcLostAgainst = "scissors"
         }
     }
 }

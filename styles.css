@@ -17,7 +17,7 @@ select{
     height: 11rem;
 }
 
-.fas{
+.fas, .fab{
     font-size: 9rem;
     margin: 3rem 5rem;;
 }
@@ -53,6 +53,6 @@ select{
 
 }
 
-.difficulty{
+.strategy{
     font-size: 2rem;
 }

@@ -36,13 +36,13 @@
     <span class="point pcPoints">PC: 0</span>
 
 
-    <div class="difficulty">
-        <label for="difficulty">Choose your difficulty</label>
-        <select class="selectDifficulty" name="difficulty">
-            <option value="easy">easy</option>
-            <option value="normal">normal</option>
-            <option value="hard">hard</option>
-            <option value="unbeatable">unbeatable</option>
+    <div class="strategy">
+        <label for="strategy">PC Strategy</label>
+        <select class="selectStrategy" name="strategy">
+            <option value="random" title="Der PC sucht sich zufällig was aus">random</option>
+            <option value="short" title="Der PC sucht sich anhand deiner letzten 2 Züge (+ den auktuellen) was aus">short sight</option>
+            <option value="wide" title="Der PC sucht sich anhand deiner letzten 7 Züge (+ den auktuellen) was aus">wide sight</option>
+            <option value="denizStrat" title="Der PC nimmt immer die eine sache bis er verliert, dann nimmt er die, gegen die er verloren hat">stick to it</option>
         </select>
     </div>
 
