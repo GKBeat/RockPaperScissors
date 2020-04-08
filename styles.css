@@ -14,7 +14,7 @@ select{
 
 #explainStrat{
     color: #3e4a61;
-    font-size: 1.5rem;
+    font-size: 1rem;
 }
 
 .title{
@@ -62,4 +62,10 @@ select{
 .strategy{
     font-size: 2rem;
     margin-top: 1rem;
+}
+
+@media only screen and (min-width: 450px) {
+    #explainStrat{
+        font-size: 2rem;
+    }
 }
