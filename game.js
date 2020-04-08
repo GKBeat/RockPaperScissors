@@ -6,6 +6,7 @@ var currentlyFighting = false;
 var playerPoints = 0;
 var pcPoints = 0;
 
+// es startet immer mit der leichtesten stufe
 var difficulty = "easy";
 
 var playerPattern= [];
@@ -15,18 +16,16 @@ $(".button").on("click", function(event) {
         currentlyFighting = true;
         let playerChoice = event.target.id;
 
-        playerPattern.push(playerChoice);
-
+        // wenn man auf den knopf drückt wird der button orange
         $(`#${playerChoice}`).addClass("pressed");
-        setTimeout(function() {
-            $(`#${playerChoice}`).removeClass("pressed");
-        }, 1500);
 
+        // das Player fragezeichen wird zu dem ausgewählten
         player.removeClass("fa-question");
         player.addClass(`fa-hand-${playerChoice}`);
 
         let pcChoice = "";
 
+        // je eingestellter schwierigkeit macht der computer eine Aktion
         if (difficulty === "easy") {
             pcChoice = pcEasyAI();
 
@@ -37,8 +36,15 @@ $(".button").on("click", function(event) {
             pcChoice = pcUnbeatableAI(playerChoice);
         }
 
+
+        // wer hat gewonnen?
         gameLogic(playerChoice, pcChoice);
 
+        // damit der bot in den schwierigkeitsstufen analysieren kann was der Player bisher gewählt hat
+        playerPattern.push(playerChoice);
+
+
+        // alles wird aufgeräumt und für die nächste Runde vorbereitet
         setTimeout(function() {
             player.removeClass(`fa-hand-${playerChoice}`);
             player.addClass("fa-question");
@@ -47,21 +53,24 @@ $(".button").on("click", function(event) {
             pc.addClass("fa-question");
 
             $(".title").text("Choose your Fighter!");
+            $(`#${playerChoice}`).removeClass("pressed");
 
             $(".playerPoints").text(`Player:${playerPoints}`)
             $(".pcPoints").text(`PC:${pcPoints}`)
             currentlyFighting = false;
         }, 1500);
-
-
     }
 });
 
+
+// ändert die schwierigkeit
 $(".selectDifficulty").on("change", function(event) {
     let selectedDifficulty = event.target.value;
     difficulty = selectedDifficulty;
 });
 
+
+// der Bot sucht sich random was aus und wählt es
 function pcEasyAI() {
     let randomSign = Math.floor(Math.random() * 3);
     let pcChoice = pcAnswer[randomSign];
@@ -71,6 +80,8 @@ function pcEasyAI() {
     return pcChoice;
 }
 
+
+der Bot  analysiert je nach schwierigkeit
 function pcNormalHardAI(difficulty) {
 
     let rock = 0;
@@ -102,10 +113,8 @@ function pcNormalHardAI(difficulty) {
 
     console.log(lastChoices);
 
-    if(lastChoices.length > 3){
-        if(lastChoices[3] === undefined){
-            pcChoice = pcEasyAI();
-        }
+    if(lastChoices.length > 3 && lastChoices[3] === undefined){
+        pcChoice = pcEasyAI();
 
     }else if (rock >= paper && rock >= scissors) {
         pcChoice = "paper";
@@ -123,14 +132,19 @@ function pcNormalHardAI(difficulty) {
     return pcChoice;
 }
 
+
+// der Bot weiß immer was der Player pickt und macht
 function pcUnbeatableAI(playerChoice) {
     let pcChoice = ""
     if (playerChoice === "rock") {
         pcChoice = "paper";
+
     } else if (playerChoice === "paper") {
         pcChoice = "scissors";
+
     } else if (playerChoice === "scissors") {
         pcChoice = "rock";
+
     }
 
     changePcIcon(pcChoice);
@@ -138,11 +152,15 @@ function pcUnbeatableAI(playerChoice) {
     return pcChoice;
 }
 
+
+// ändert die Bot fragezeichen zu dem ausgewählten
 function changePcIcon(pcChoice) {
     pc.removeClass("fa-question");
     pc.addClass(`fa-hand-${pcChoice}`);
 }
 
+
+// gibt ein array mit den letzten aktionen des Players zurück
 function lastMultiple(num){
     let len = playerPattern.length;
     let lastNum = [];
@@ -154,6 +172,8 @@ function lastMultiple(num){
     return lastNum;
 }
 
+
+// schaut wer mit seiner Auswahl gewonnen hat
 function gameLogic(playerChoice, pcChoice) {
     if (playerChoice === pcChoice) {
         $(".title").text("Its a TIE!");
