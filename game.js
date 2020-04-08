@@ -81,7 +81,7 @@ function pcEasyAI() {
 }
 
 
-der Bot  analysiert je nach schwierigkeit
+// der Bot  analysiert je nach schwierigkeit
 function pcNormalHardAI(difficulty) {
 
     let rock = 0;
