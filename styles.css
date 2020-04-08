@@ -12,12 +12,17 @@ select{
     font-size: 1.5rem;
 }
 
+#explainStrat{
+    color: #3e4a61;
+}
+
 .title{
     font-size: 6rem;
     height: 11rem;
+    margin-top: 1rem;
 }
 
-.fas, .fab{
+.fas{
     font-size: 9rem;
     margin: 3rem 5rem;;
 }
@@ -28,7 +33,7 @@ select{
 }
 
 .selectFighter{
-    margin-bottom: 6rem;
+    margin-bottom: 1rem;
 }
 
 .button{
@@ -55,4 +60,5 @@ select{
 
 .strategy{
     font-size: 2rem;
+    margin-top: 1rem;
 }

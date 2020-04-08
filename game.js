@@ -71,6 +71,20 @@ $(".button").on("click", function(event) {
 // ändert die schwierigkeit
 $(".selectStrategy").on("change", function(event) {
     strategy = event.target.value;
+
+    if(strategy === "random"){
+        $("#explainStrat").text("Der PC sucht sich zufällig was aus");
+
+    } else if(strategy === "short"){
+        $("#explainStrat").text("Der PC sucht sich anhand deiner letzten 2 Züge (+ den auktuellen) was aus");
+
+    }else if(strategy === "wide"){
+        $("#explainStrat").text("Der PC sucht sich anhand deiner letzten 7 Züge (+ den auktuellen) was aus");
+
+    }else if(strategy === "denizStrat"){
+        $("#explainStrat").text("Der PC nimmt immer die eine sache bis er verliert, dann nimmt er die, gegen die er verloren hat");
+
+    }
 });
 
 
